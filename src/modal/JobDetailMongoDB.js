@@ -13,7 +13,7 @@ export async function addJobDetail(jobDetail) {
 
         console.log(`A document was inserted with the _id: ${result.insertedId}`);
     } finally {
-        await client.close();
+        // await client.close();
     }
 }
 
@@ -27,6 +27,6 @@ export async function addJobDetailList(jobDetailList) {
 
         console.log(`JobDetails added successfully.`);
     } finally {
-        await client.close();
+        // await client.close();
     }
 }

@@ -13,6 +13,6 @@ export async function addJobCount(jobCount) {
 
         console.log(`A document was inserted with the _id: ${result.insertedId}`);
     } finally {
-        await client.close();
+        // await client.close();
     }
 }
