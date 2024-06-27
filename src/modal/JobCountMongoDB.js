@@ -16,3 +16,16 @@ export async function addJobCount(jobCount) {
         // await client.close();
     }
 }
+
+export async function getJobCount(req, res) {
+    try {
+        const database = client.db("jobsdb_scraping");
+        const jobDetailsCollection = database.collection("job_count");
+
+        const jobCounts = await jobDetailsCollection.find({}).toArray();
+        return jobCounts;
+    } catch (error) {
+        console.error("Error fetching job counts:", error);
+        throw new Error("Failed to fetch JobCounts");
+    }
+}
