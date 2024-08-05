@@ -7,6 +7,6 @@ export async function addJobCount(req, res) {
 }
 
 export async function getJobCount(req, res) {
-    const jobCounts = await JobCountMongoDB.getJobCount(); // 假設有個函數從數據庫獲取所有 JobCount
+    const jobCounts = await JobCountMongoDB.getJobCount();
     res.status(200).json(jobCounts);
 }

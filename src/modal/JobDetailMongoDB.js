@@ -30,3 +30,61 @@ export async function addJobDetailList(jobDetailList) {
         // await client.close();
     }
 }
+
+export async function getJobDetailList(queryParams) {
+    try {
+        const { salaryRange, jobClassification, date } = queryParams;
+
+        const database = client.db("jobsdb_scraping");
+        const jobDetailsCollection = database.collection("job_details");
+
+        let pipeline = [];
+
+        if (salaryRange) {
+            const [minSalary, maxSalary] = salaryRange.split('-').map(Number);
+            if (!isNaN(minSalary) && !isNaN(maxSalary)) {
+                pipeline.push({
+                    $addFields: {
+                        salaryParts: {
+                            $map: {
+                                input: { $split: ["$salaryRange", "-"] },
+                                as: "part",
+                                in: { $toInt: "$$part" }
+                            }
+                        }
+                    }
+                });
+                pipeline.push({
+                    $match: {
+                        $expr: {
+                            $and: [
+                                { $gte: [{ $arrayElemAt: ["$salaryParts", 0] }, minSalary] },
+                                { $lte: [{ $arrayElemAt: ["$salaryParts", 1] }, maxSalary] }
+                            ]
+                        }
+                    }
+                });
+            } else {
+                return res.status(400).json({ message: 'Invalid salary range format' });
+            }
+        }
+
+        if (jobClassification) {
+            pipeline.push({
+                $match: { jobClassification }
+            });
+        }
+
+        if (date) {
+            pipeline.push({
+                $match: { date: { $gte: new Date(date) } }
+            });
+        }
+
+        const jobDetails = await jobDetailsCollection.aggregate(pipeline).toArray();
+        return jobDetails;
+    } catch (error) {
+        console.error('Error in getJobDetailList:', error);
+        throw error;
+    }
+}
