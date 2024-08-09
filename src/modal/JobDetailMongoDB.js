@@ -33,13 +33,14 @@ export async function addJobDetailList(jobDetailList) {
 
 export async function getJobDetailList(queryParams) {
     try {
-        const { salaryRange, jobClassification, date } = queryParams;
+        const { salaryRange, jobSubClassification, startDate, endDate } = queryParams;
 
         const database = client.db("jobsdb_scraping");
         const jobDetailsCollection = database.collection("job_details");
 
         let pipeline = [];
 
+        // 处理 salaryRange
         if (salaryRange) {
             const [minSalary, maxSalary] = salaryRange.split('-').map(Number);
             if (!isNaN(minSalary) && !isNaN(maxSalary)) {
@@ -65,22 +66,32 @@ export async function getJobDetailList(queryParams) {
                     }
                 });
             } else {
-                return res.status(400).json({ message: 'Invalid salary range format' });
+                throw new Error('Invalid salary range format');
             }
         }
 
-        if (jobClassification) {
+        // 处理 jobSubClassification
+        if (jobSubClassification) {
             pipeline.push({
-                $match: { jobClassification }
+                $match: { jobSubClassification }
             });
         }
 
-        if (date) {
+        // 处理日期范围
+        if (startDate || endDate) {
+            let dateFilter = {};
+            if (startDate) {
+                dateFilter.$gte = new Date(startDate);
+            }
+            if (endDate) {
+                dateFilter.$lte = new Date(endDate);
+            }
             pipeline.push({
-                $match: { date: { $gte: new Date(date) } }
+                $match: { date: dateFilter }
             });
         }
 
+        // 执行聚合查询
         const jobDetails = await jobDetailsCollection.aggregate(pipeline).toArray();
         return jobDetails;
     } catch (error) {
