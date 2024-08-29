@@ -28,4 +28,10 @@ function onServerStart() {
     console.log(`Server started on port ${port}`)
 }
 
-app.listen(3000, onServerStart);
+app.listen(port, onServerStart);
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
