@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import * as JobDetailController from '../controller/JobDetailController.js';
+import * as JobDetailController from '../controller/jobDetailController.js';
 
 
 export const jobDetailRouter = Router();
@@ -9,4 +9,4 @@ jobDetailRouter.route('/job-detail')
 
 jobDetailRouter.route('/job-detail-list')
     .post(JobDetailController.addJobDetailList)
-    .get(JobDetailController.getJobDetailLis);
+    .get(JobDetailController.getJobDetailList);
