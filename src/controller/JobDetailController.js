@@ -1,5 +1,4 @@
 import * as JobDetailMongoDB from "../modal/JobDetailMongoDB.js"
-import * as JobCountMongoDB from "../modal/JobCountMongoDB.js";
 
 export async function addJobDetail(req, res) {
     req.body.date = new Date(req.body.date);
