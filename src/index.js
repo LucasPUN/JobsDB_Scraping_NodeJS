@@ -1,8 +1,8 @@
 import express from 'express';
 import logger from 'morgan';
-import {jobDetailRouter} from "./routes/JobDetailsRouter.js"
+import {jobDetailRouter} from "routes/JobDetailsRouter.js"
 import bodyParser from "body-parser";
-import {jobCountRouter} from "./routes/JobCountRouter.js";
+import {jobCountRouter} from "routes/JobCountRouter.js";
 
 const app = express();
 
