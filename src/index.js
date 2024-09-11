@@ -6,7 +6,9 @@ import {jobCountRouter} from "./routes/JobCountRouter.js";
 
 const app = express();
 
-const port = 3000;
+// const port = 3000;
+const port = process.env.PORT || 3001;
+
 
 app.use(bodyParser.json());
 
@@ -26,4 +28,10 @@ function onServerStart() {
     console.log(`Server started on port ${port}`)
 }
 
-app.listen(3000);
+app.listen(port, onServerStart);
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
