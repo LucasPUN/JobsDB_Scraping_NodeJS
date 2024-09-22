@@ -1,5 +1,4 @@
 import * as JobDetailMongoDB from "../modal/JobDetailMongoDB.js"
-import * as JobCountMongoDB from "../modal/JobCountMongoDB.js";
 
 export async function addJobDetail(req, res) {
     req.body.date = new Date(req.body.date);
@@ -17,7 +16,7 @@ export async function addJobDetailList(req, res) {
     res.status(200).json({msg: "JobDetails added successfully."});
 }
 
-export async function getJobDetailLis(req, res) {
+export async function getJobDetailList(req, res) {
     try {
         const jobDetails = await JobDetailMongoDB.getJobDetailList(req.query);
         res.status(200).json(jobDetails);

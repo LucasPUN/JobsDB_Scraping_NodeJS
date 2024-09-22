@@ -9,4 +9,4 @@ jobDetailRouter.route('/job-detail')
 
 jobDetailRouter.route('/job-detail-list')
     .post(JobDetailController.addJobDetailList)
-    .get(JobDetailController.getJobDetailLis);
+    .get(JobDetailController.getJobDetailList);
